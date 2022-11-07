@@ -26,78 +26,6 @@ const initializeDbAndServer = async () => {
 };
 initializeDbAndServer();
 
-// const validationRequest = (request, response, next) => {
-//   const resObject = request.query;
-//   if (
-//     (resObject.status === undefined ||
-//       ["TO DO", "IN PROGRESS", "DONE"].includes(resObject.status)) === false
-//   ) {
-//     response.status(400);
-//     response.send("Invalid Todo Status");
-//   } else if (
-//     (resObject.priority === undefined ||
-//       ["HIGH", "MEDIUM", "LOW"].includes(resObject.priority)) === false
-//   ) {
-//     response.status(400);
-//     response.send("Invalid Todo Priority");
-//   } else if (
-//     (resObject.category === undefined ||
-//       ["WORK", "HOME", "LEARNING"].includes(resObject.category)) === false
-//   ) {
-//     response.status(400);
-//     response.send("Invalid Todo Category");
-//   } else if (
-//     (resObject.date === undefined || isValid(new Date(resObject.date))) ===
-//     false
-//   ) {
-//     response.status(400);
-//     response.send("Invalid Due Date");
-//   } else {
-//     next();
-//   }
-// };
-
-// const validationRequestBody = (request, response, next) => {
-//   const resObject = request.body;
-//   if (
-//     (resObject.status === undefined ||
-//       ["TO DO", "IN PROGRESS", "DONE"].includes(resObject.status)) === false
-//   ) {
-//     response.status(400);
-//     response.send("Invalid Todo Status");
-//   } else if (
-//     (resObject.priority === undefined ||
-//       ["HIGH", "MEDIUM", "LOW"].includes(resObject.priority)) === false
-//   ) {
-//     response.status(400);
-//     response.send("Invalid Todo Priority");
-//   } else if (
-//     (resObject.category === undefined ||
-//       ["WORK", "HOME", "LEARNING"].includes(resObject.category)) === false
-//   ) {
-//     response.status(400);
-//     response.send("Invalid Todo Category");
-//   } else if (
-//     (resObject.dueDate === undefined ||
-//       isValid(new Date(resObject.dueDate))) === false
-//   ) {
-//     response.status(400);
-//     response.send("Invalid Due Date");
-//   } else {
-//     next();
-//   }
-// };
-// const convertDbObjectToCamelCaseObject = (object) => {
-//   return {
-//     id: object.id,
-//     todo: object.todo,
-//     priority: object.priority,
-//     status: object.status,
-//     category: object.category,
-//     dueDate: object.due_date,
-//   };
-// };
-
 const authenticateToken = (request, response, next) => {
   let authHeader = request.headers["authorization"];
   if (authHeader !== undefined) {
@@ -117,43 +45,6 @@ const authenticateToken = (request, response, next) => {
     response.send("Invalid JWT Token");
   }
 };
-
-// //API 1 GET
-// app.get("/todos/", validationRequest, async (request, response) => {
-//   try {
-//     const {
-//       offset = 0,
-//       limit = 5,
-//       order = "ASC",
-//       order_by = "id",
-//       status = "",
-//       priority = "",
-//       search_q = "",
-//       category = "",
-//     } = request.query;
-//     const Query = `
-//     SELECT
-//         *
-//     FROM
-//         todo
-//     WHERE
-//         status LIKE '%${status}%' and
-//         priority LIKE '%${priority}%' and
-//         todo LIKE '%${search_q}%' and
-//         category LIKE '%${category}'
-//     ORDER BY ${order_by} ${order}
-//         LIMIT ${limit} OFFSET ${offset};`;
-//     const dbResponse = await db.all(Query);
-//     let results = [];
-//     for (let i = 0; i < dbResponse.length; i++) {
-//       let resObject = convertDbObjectToCamelCaseObject(dbResponse[i]);
-//       results.push(resObject);
-//     }
-//     response.send(results);
-//   } catch (error) {
-//     console.log(`ERROR API ${error.message}`);
-//   }
-// });
 
 // API 1 POST
 app.post("/register/", async (request, response) => {
