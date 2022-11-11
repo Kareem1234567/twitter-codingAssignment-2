@@ -342,17 +342,23 @@ app.get("/user/tweets/", authenticateToken, async (request, response) => {
         user
     WHERE
         username='${username}';`;
-    const userId = await db.get(getUserIdQuery);
+    const userId = await db.all(getUserIdQuery);
     const getFollowingQuery = `
-    SELECT
-        tweet,count(DISTINCT(like_id)) as likes,count(DISTINCT(reply_id)) as replies,date_time as dateTime
-    FROM
-        (tweet INNER JOIN  like ON tweet.user_id=like.user_id) as T INNER JOIN reply ON T.user_id= reply.user_id
-    WHERE 
-        tweet.user_id=${userId.user_id}
-    GROUP BY
-        tweet.tweet_id
-        ;`;
+   SELECT 
+   tweet,
+   (
+       SELECT COUNT(like_id)
+       FROM like
+       WHERE tweet_id=tweet.tweet_id
+   ) AS likes,
+   (
+       SELECT COUNT(reply_id)
+       FROM reply
+       WHERE tweet_id=tweet.tweet_id  
+   ) AS replies,
+   date_time AS dateTime
+   FROM tweet
+   WHERE user_id= ${userId[0].user_id};`;
     const results = await db.all(getFollowingQuery);
     response.send(results);
   } catch (error) {
